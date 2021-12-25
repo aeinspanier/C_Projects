@@ -26,7 +26,7 @@ void Create(int A[], int n){
 
 void Display(struct Node *p){
     while(p != NULL){
-        printf("%d",p->data);
+        printf("  %d  ",p->data);
         p=p->next;
     }
 
@@ -58,12 +58,46 @@ int RMax(struct Node *p){
     return p->data;
 }
 
-int main(){
-    int A[] = {3,5,7,10,15,50,8,12,20};
+struct Node * LSearch(struct Node *p, int key){
+    struct Node *q;
+    q=p;
+    while(p != NULL){
+        if(key == p->data){
+            printf("%d\n",q->data);
+            q->next = p->next;
+            p->next = first;
+            first = p;
+            return p;
+        }
+        q=p;
+        p=p->next;
+    }
+    return NULL;
+}
 
-    Create(A, 9);
-    printf("Sum is:  %d\n", RSum(first));
-    printf("Count is:   %d\n",RCount(first));
-    printf("Max Element:   %d\n",RMax(first));
-    
+void Insert(struct Node *p, int index, int x){
+    if(index < 0 || index > RCount(p)) return;
+    struct Node *t;
+    t = (struct Node *)malloc(sizeof(struct Node));
+    t->data = x;
+
+    if(index == 0){
+        t->next = first;
+        first = t;
+    }else{
+        for(int i=0;i<index-1;i++){
+            p=p->next;
+        }
+        t->next = p->next;
+        p->next = t;
+    }
+}
+
+int main(){
+    struct Node *temp;
+    Insert(first,0,10);
+    Insert(first,1,20);
+    Insert(first,2,30);
+    Insert(first,1,50);
+    Display(first); 
 }
