@@ -18,6 +18,7 @@ class DoublyLinkedList{
         int Length();
         void Insert(int index, int x);
         int Delete(int index);
+        void Reverse();
 };
 
 DoublyLinkedList::DoublyLinkedList(int *A, int n){
@@ -116,10 +117,22 @@ int DoublyLinkedList::Delete(int index){
     return x;
 }
 
+void DoublyLinkedList::Reverse(){
+    Node *t, *p = head;
+
+    while(p){
+        t=p->next;
+        p->next = p->prev;
+        p->prev = t;
+        p=p->prev;
+        if(p && p->next == NULL) head=p;
+    }
+}
+
 int main(){
     int A[] = {10,20,30,40,50};
     DoublyLinkedList DLL(A, 5);
-    DLL.Delete(2);
+    DLL.Reverse();
     cout<<"Length:  "<<DLL.Length()<<endl;
     DLL.Display();
     return 0;    
