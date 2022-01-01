@@ -4,7 +4,7 @@ using namespace std;
 
 class Node{
     public:
-        int data;
+        char data;
         Node *next;
 };
 
@@ -21,6 +21,7 @@ class Stack{
         int Pop();
         int Peek(int index);
         int StackTop();
+        bool IsBalanced(char *exp);
 };
 
 Stack::Stack(){
@@ -105,25 +106,24 @@ int Stack::StackTop(){
     return x;
 }
 
-int main(){
-    int A[] = {1,3,5,7,9};
-    int len = sizeof(A)/sizeof(A[0]);
-    Stack stck;
-    
-    for(int i = 0; i<len;i++){
-       stck.Push(A[i]);
+bool Stack::IsBalanced(char *exp){
+    for(int i=0; exp[i] != '\0';i++){
+        if(exp[i] == '('){
+            Push(exp[i]);
+        }
+        else if(exp[i] == ')'){
+            if(IsEmpty()) return false;
+            Pop();
+        }
     }
+    return IsEmpty() ? true : false;
+}
+
+int main(){
+    Stack stk;
+    char E[] = "((a+b)*(c-d))(";
+    cout << stk.IsBalanced(E) << endl;
     
-    stck.Push(11);
-
-    stck.Display();
-
-    cout<<stck.Peek(1)<<endl;
-
-    cout<<stck.Pop()<<endl;
-
-    stck.Display();
-
     return 0;
 }
 
