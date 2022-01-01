@@ -2,13 +2,17 @@
 
 using namespace std;
 
+class Node{
+    public:
+        int data;
+        Node *next;
+};
+
 class Stack{
     private:
-        int size;
-        int top;
-        int *S;
+        Node *top;
     public:
-        Stack(int size);
+        Stack();
         ~Stack();
         void Display();
         void Push(int x);
@@ -19,59 +23,77 @@ class Stack{
         int StackTop();
 };
 
-Stack::Stack(int size){
-    this->size=size;
-    top = -1;
-    S = new int[size];
+Stack::Stack(){
+    top = nullptr;
 }
 
 Stack::~Stack(){
-    delete[] S;
+    Node *p = top;
+    while(p){
+        top = p->next;
+        delete p;
+        p=top;
+    }
 }
 
 void Stack::Display(){
-    for(int i=top;i>=0;i--){
-        cout<<S[i]<<" | "<<flush;
+    Node *p = top;
+    while(p){
+        cout<<p->data<<" | "<<flush;
+        p=p->next;
     }
     cout<<endl;
 }
 
 int Stack::IsFull(){
-    if(top==size-1) return 1;
-    else return 0;
+    Node *t = new Node;
+    int r = t ? 1 : 0;
+    delete t;
+    return r;
 }
 
 void Stack::Push(int x){
-    if(IsFull()) cout<<"Stack Overflow"<<endl;
+    Node *t = new Node;
+    if(t == nullptr) cout<<"Stack Overflow"<<endl;
     else{
-        top++;
-        S[top] = x;
+        t->data = x;
+        t->next = top;
+        top = t;
     }
 }
 
 int Stack::IsEmpty(){
-    if(top==-1) return 1;
-    else return 0;
+    return top ? 0 : 1;
 }
 
 int Stack::Pop(){
     int x = -1;
+    Node *p;
     if(IsEmpty()){
         cout<<"Stack underflow"<<endl;
     }else{
-        x = S[top];
-        top--;
+        p=top;
+        x = top->data;
+        top = top->next;
+        delete p;
     }
     return x;
 }
 
 int Stack::Peek(int index){
     int x=-1;
-    int stackPos = top-index+1;
-
-    if(stackPos < 0 || stackPos==size) cout<<"Invalid position"<<endl;
+    if(IsEmpty()){
+        cout<<"function Peek stack empty"<<endl;  
+        return -1;
+    }
     else{
-        x = S[stackPos];
+        Node *p=top;
+        for(int i=0; p && i<index-1;i++){
+            p=p->next;
+        }
+        if(p){
+            x = p->data;
+        }
     }
     return x;
 }
@@ -79,14 +101,14 @@ int Stack::Peek(int index){
 int Stack::StackTop(){
     int x = -1;
     if(IsEmpty()) cout<<"Empty"<<endl;
-    else x = S[top];
+    else x = top->data;
     return x;
 }
 
 int main(){
     int A[] = {1,3,5,7,9};
     int len = sizeof(A)/sizeof(A[0]);
-    Stack stck(len);
+    Stack stck;
     
     for(int i = 0; i<len;i++){
        stck.Push(A[i]);
